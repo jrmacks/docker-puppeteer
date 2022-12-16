@@ -1,10 +1,19 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 # Chrome needs a timezone/locale specific to know which version to set
 ENV TZ=America/New_York
 RUN echo "Preparing geographic area ..."
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+# Update git to latest version
 RUN apt-get update -y
+RUN apt-get remove git
+RUN apt-get install software-properties-common -y
+RUN apt-get update -y 
+RUN add-apt-repository ppa:git-core/ppa -y
+RUN apt-get update -y
+RUN apt-get install git -y
+RUN echo git --version
+
 RUN apt-get install -y curl wget gnupg ca-certificates procps libxss1 git
 # Rather than loading up all the dependencies needed for puppeteer 
 # just installing chrome will automatically load all the neccessary dependencies
